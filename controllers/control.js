@@ -3,13 +3,7 @@ var async = require('async');
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 const fs = require('fs');
-
-
-
-
-
-
-
+var multer  = require('multer')
 
 
 exports.viewprospect = function(req, res){
@@ -64,8 +58,9 @@ exports.createprospect = [
       else{
 
 
-        prospect.logo.data = fs.readFileSync(req.files.logo);
-        prospect.logo.contentType = 'image/png'
+      //  prospect.logo.data = fs.readFileSync(req.file.path, { encoding: 'base64' });
+        prospect.logo.data = req.file.path;
+        prospect.logo.contentType = 'image/png';
 
 
     prospect.save(function(err){
@@ -75,7 +70,7 @@ exports.createprospect = [
 
   //  res.redirect(prospect.url);
     //  console.log(req.body);
-      res.redirect(req.body.logo);
+      res.redirect(req.body.name);
 
 
 
@@ -85,3 +80,34 @@ exports.createprospect = [
 });
 }
 ];
+
+exports.displaylogo = function(req, res){
+
+          var company = req.params.company;
+
+
+
+          Customer.findOne({name: company})
+            .exec( function(err, found_prospect){
+              if(err){return next(err);}
+              if(found_prospect){
+                //page = found_prospect.logo.contentType;
+                console.log(found_prospect);
+              //  var displyed_logo = new Buffer(found_prospect.logo.data).toString('base64');
+                //res.contentType(found_prospect.logo.contentType);
+
+
+                res.render('home', { title: company , customer_logo: found_prospect.logo.data, layout: 'layout'});
+              } else{
+
+
+
+
+                res.render('home', { title: "NOPE" , customer_logo: "didnt work", layout: 'layout'});
+
+
+              }
+
+            });
+
+}

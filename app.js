@@ -6,6 +6,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 //var hbs = require('hbs');
 var expressHbs = require('express-handlebars');
+const fs = require('fs');
 
 
 var indexRouter = require('./routes/index');
@@ -31,9 +32,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(__dirname, 'uploads'));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+//for multer
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

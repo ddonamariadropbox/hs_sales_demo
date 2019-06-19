@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var schema = new Schema({
  name: {type: String, required: true},
- logo: {data: Buffer, contentType: String}
+ logo: {data: String, contentType: String}
 });
 
 schema.virtual('url').get(function(){
