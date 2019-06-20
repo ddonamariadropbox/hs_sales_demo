@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 
 var schema = new Schema({
  name: {type: String, required: true},
- logo: {data: String, contentType: String}
+ logo: {data: String, contentType: String},
+ primary_color: String
 });
 
 schema.virtual('url').get(function(){

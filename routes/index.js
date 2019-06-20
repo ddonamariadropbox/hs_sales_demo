@@ -24,14 +24,16 @@ router.post('/submit', upload.single("logo_image"), prospect_controller.createpr
 router.get('/:company', prospect_controller.displaylogo);
 
 
-router.get('/:company/signup', function(req, res, next) {
+router.get('/:company/signup', prospect_controller.signuppage);
 
-            var company = req.params.company;
-            var page = req.params.page;
-
-            res.render('layouts/signup', { title: req.params.company, layout: 'layout' });
-
-});
+// function(req, res, next) {
+//
+//             var company = req.params.company;
+//             var page = req.params.page;
+//
+//             res.render('layouts/signup', { title: req.params.company, layout: 'layout' });
+//
+// });
 
 
 module.exports = router;

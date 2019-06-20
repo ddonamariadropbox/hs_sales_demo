@@ -61,7 +61,7 @@ exports.createprospect = [
       //  prospect.logo.data = fs.readFileSync(req.file.path, { encoding: 'base64' });
         prospect.logo.data = req.file.path;
         prospect.logo.contentType = 'image/png';
-
+        prospect.primary_color = req.body.primary_color;
 
     prospect.save(function(err){
       if(err){return next(err);}
@@ -97,7 +97,7 @@ exports.displaylogo = function(req, res){
                 //res.contentType(found_prospect.logo.contentType);
 
 
-                res.render('home', { title: company , customer_logo: found_prospect.logo.data, layout: 'layout'});
+                res.render('home', { title: company , customer_logo: found_prospect.logo.data, primary_color: found_prospect.primary_color, layout: 'layout'});
               } else{
 
 
@@ -109,5 +109,33 @@ exports.displaylogo = function(req, res){
               }
 
             });
+
+}
+
+exports.signuppage = function(req, res){
+  var company = req.params.company;
+
+  Customer.findOne({name: company})
+    .exec( function(err, found_prospect){
+      if(err){return next(err);}
+      if(found_prospect){
+        //page = found_prospect.logo.contentType;
+        console.log(found_prospect);
+      //  var displyed_logo = new Buffer(found_prospect.logo.data).toString('base64');
+        //res.contentType(found_prospect.logo.contentType);
+
+
+        res.render('layouts/signup', { title: company , customer_logo: found_prospect.logo.data, layout: 'layout'});
+      } else{
+
+
+
+
+        res.render('layouts/signup', { title: "NOPE" , customer_logo: "didnt work", layout: 'layout'});
+
+
+      }
+
+    });
 
 }
