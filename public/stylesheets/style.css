@@ -7,6 +7,15 @@ a {
   color: #00B7FF;
 }
 
+
+
+.homescreen{
+    margin-left: 200px ;
+    margin-top: 30px;
+
+
+}
+
 .nav {
   overflow: hidden;
   background-color: black;
@@ -16,7 +25,7 @@ a {
 
 .nav a {
   float: left;
-  display: block;
+  display: flex;
   color: #f2f2f2;
   text-align: center;
   padding: 20px 70px;
@@ -35,6 +44,23 @@ a {
   margin-left: 50px ;
   margin-right: 50px ;
 }
+
+/* Main pics and text */
+
+.flex_homescreen{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.flex_homescreen > div {
+  margin: 10px;
+  padding: 20px;
+
+
+}
+
+/***********/
+
 input[type=text], select {
   width: 100%;
   padding: 12px 20px;
@@ -47,7 +73,7 @@ input[type=text], select {
 
 input[type=submit] {
   width: 100%;
-  background-color: #4CAF50;
+/*  background-color: #4CAF50; */
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -55,10 +81,10 @@ input[type=submit] {
   border-radius: 4px;
   cursor: pointer;
 }
-
+/*
 input[type=submit]:hover {
   background-color: #45a049;
-}
+} */
 
 .submitter {
   border-radius: 5px;

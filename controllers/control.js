@@ -125,7 +125,7 @@ exports.signuppage = function(req, res){
         //res.contentType(found_prospect.logo.contentType);
 
 
-        res.render('layouts/signup', { title: company , customer_logo: found_prospect.logo.data, layout: 'layout'});
+        res.render('layouts/signup', { title: company , customer_logo: found_prospect.logo.data, primary_color: found_prospect.primary_color, layout: 'layout'});
       } else{
 
 

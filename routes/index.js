@@ -14,26 +14,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
 router.post('/submit', upload.single("logo_image"), prospect_controller.createprospect);
-
 
 router.get('/:company', prospect_controller.displaylogo);
 
-
 router.get('/:company/signup', prospect_controller.signuppage);
-
-// function(req, res, next) {
-//
-//             var company = req.params.company;
-//             var page = req.params.page;
-//
-//             res.render('layouts/signup', { title: req.params.company, layout: 'layout' });
-//
-// });
 
 
 module.exports = router;
