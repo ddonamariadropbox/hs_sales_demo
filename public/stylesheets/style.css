@@ -19,8 +19,9 @@ a {
 .nav {
   overflow: hidden;
   background-color: black;
-  margin-left: 50px ;
-  margin-right: 50px ;
+  margin-left: 0px ;
+  margin-right: 0px ;
+
 }
 
 .nav a {
@@ -32,6 +33,7 @@ a {
   text-decoration: none;
   font-family: futura;
   font-weight: bold;
+
 }
 .nav a:hover {
   background-color: #ddd;
@@ -41,8 +43,8 @@ a {
 
   padding: 10px;
   text-align: center;
-  margin-left: 50px ;
-  margin-right: 50px ;
+  margin-left: 0px ;
+  margin-right: 0px ;
 }
 
 /* Main pics and text */
@@ -53,7 +55,7 @@ a {
 }
 
 .flex_homescreen > div {
-  margin: 10px;
+  margin: 0px;
   padding: 20px;
 
 

@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var expressHbs = require('express-handlebars');
 const fs = require('fs');
 
+rootpath = __dirname.toString();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

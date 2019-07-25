@@ -7,54 +7,113 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"> -->
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
-    <script type="text/javascript" src="/public/javascripts/sourcecode.js"></script>
+    <!-- <script type="text/javascript" src="/public/javascripts/sourcecode.js"></script> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://s3.amazonaws.com/cdn.hellosign.com/public/js/hellosign-embedded.LATEST.min.js"></script>
+
+
+
+    <script>
+
+
+    function merge_open(){
+    //  console.log("!!!!!!!!!!!!!!!!calling merge_open()");
+
+          var comp = "{{title}}" ;
+          //var comp = JSON.stringify({company:{{title}}, first_name:})
+         var form_data = $('#op').serializeArray();
+         var data = {};
+         for(var i = 0; i < form_data.length; i++){
+           data[form_data[i]['name']] = form_data[i]['value'];
+         }
+         data.company = comp;
+         console.log(data);
+
+           $.ajax({
+                      type:'POST',
+                      url:'/submitfields',
+                      data: data ,
+
+                      success: function(response) {
+
+                       HelloSign.init(response.clientid);
+                      	HelloSign.open({"url": response.url,
+                            "skipDomainVerification": true,
+                            messageListener: function(eventData){
+                                      //handle callback
+                                if(eventData.event == HelloSign.EVENT_SIGNED){
+                                    document.location = "/{{title}}/dashboards";
+                                }
+
+
+                              }
+                          });
+
+
+                      },
+                      dataType: 'json'
+
+                  });
+    }
+
+
+
+    // $('#open_the_doc').on('Submit', function() {
+    // console.log("!");
+    //         merge_open();
+    //
+    //     });
+
+     $(function(){
+       console.log("!!!LOADING!!!!");
+     });
+
+
+    </script>
+
 
   </head>
   <body>
 
-
-  <!-- <div class="container">
-    {{{body}}}
-  </div>d -->
   <div class="submitter">
 
-    <form onsubmit="return false;" method="post" name="myform">
-
+      <form id="op" action="#" onsubmit="merge_open();return false;">
 
 	    <label for="first_name">First Name</label>
-	    <input type="text" id="first_name"  placeholder="Enter your first name here">
+	    <input type="text" id="first_name"  name="first_name" placeholder="Enter your first name here">
 
       <label for="last_name">Last Name</label>
-	    <input type="text" id="last_name"  placeholder="Enter your last name here">
+	    <input type="text" id="last_name" name="last_name"  placeholder="Enter your last name here">
 
 	    <label for="email">Email</label>
-	    <input type="text" id="email" placeholder="Enter your email here">
+	    <input type="text" id="email" name="email" placeholder="Enter your email here">
 
       <label for="address">Address</label>
-	    <input type="text" id="address" placeholder="Enter your address here">
+	    <input type="text" id="address" name="address" placeholder="Enter your address here">
 
-	    <!-- <label for="country">Country</label>
-	    <select id="country">
-	      	<option value="australia">Australia</option>
-	      	<option value="canada">Canada</option>
-	     	<option value="usa">USA</option>
-	    </select> -->
-
-	    <input type="submit" name="submit" onclick="opendocnow()">
+	    <input type="submit" value="Submit" >
 
   	</form>
-  				<span id='display'></span>
+
+
 
 </div>
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+
 <style>
 
 input[type=submit] {
   background-color: {{primary_color}};
 
 }
+body {
+  background: url("/public/siteimages/signup.JPG") no-repeat center center fixed;
+    background-attachment: scroll;
+  /*  background-position: 0px 265px; */
+    background-size: 100% 100%;
 
+
+}
 
 
 </style>

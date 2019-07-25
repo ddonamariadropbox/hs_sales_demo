@@ -1,24 +1,40 @@
-
-
+<head>
+  <title>HelloSign API Demo</title>
+</head>
+</body>
 <div class="index_title">
-<h1>Hellosign API Demo Website</h1>
+<h1>HelloSign API Demo Website</h1>
 </div>
+  <div class="submitter">
 <form action="/submit" method="post" enctype="multipart/form-data">
 
   <label for="prospect">Enter prospect name:</label>
   <input type="text" id="prospect"  name="name" placeholder="Prospect name...">
   </br>
+  </br>
   <label for="file">Upload prospect logo:</label>
   <input type="file" name="logo_image">
   </br>
+  </br>
   <label for="color">Select primary color:</label>
   <input type="color" name="primary_color">
+  </br>
+  </br>
+  <label for="template">Select template:</label>
+</br>
+  <input type="radio" name="template" value="NDA" checked> NDA<br>
+  <input type="radio" name="template" value="MSA"> MSA<br>
+  <input type="radio" name="template" value="EmpAck"> Employee Acknowledgement<br>
+  <input type="radio" name="template" value="Waiver"> Waiver
+  </br>
+  </br>
   </br>
   <input type="submit" value="SUBMIT" >
 
 </form>
 
-
+</div>
+</body>
 <style>
 input[type=submit] {
   background-color: #4c85af;

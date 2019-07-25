@@ -1,0 +1,37 @@
+<div id="update">
+  <div class="submitter">
+    <div class="index_title">
+    <h1>Update Site:</h1>
+    </div>
+<form action="/{{title}}/updatesite" method="post" enctype="multipart/form-data">
+
+
+</br>
+
+  <label for="file">Upload prospect logo:</label>
+  <input type="file" name="logo_image">
+  </br>
+  </br>
+  <label for="color">Select primary color:</label>
+  <input type="color" name="primary_color" value="{{primary_color}}">
+  </br>
+  </br>
+  <input type="submit" value="UPDATE" >
+
+</form>
+
+</div>
+
+
+</div>
+<style>
+input[type=submit] {
+  background-color: #000000;
+}
+
+.index_title {
+text-align: center;
+}
+
+
+</style>
