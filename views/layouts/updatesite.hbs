@@ -9,11 +9,23 @@
 </br>
 
   <label for="file">Upload prospect logo:</label>
+  </br>
   <input type="file" name="logo_image">
-  </br>
-  </br>
+</br>
+</br>
+
   <label for="color">Select primary color:</label>
+
   <input type="color" name="primary_color" value="{{primary_color}}">
+  </br>
+  </br>
+  <label for="template">Select template:</label>
+  </br>
+</br>
+  <input type="radio" name="template" value="NDA" checked> NDA<br>
+  <input type="radio" name="template" value="MSA"> MSA<br>
+  <input type="radio" name="template" value="EmpAck"> Employee Acknowledgement<br>
+  <input type="radio" name="template" value="Waiver"> Waiver
   </br>
   </br>
   <input type="submit" value="UPDATE" >
@@ -24,6 +36,8 @@
 
 
 </div>
+
+<center><h6> Created by MPH</h6></center>
 <style>
 input[type=submit] {
   background-color: #000000;

@@ -11,7 +11,7 @@ var app = express();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'HelloSign Demo' });
 });
 
 router.post('/submit', upload.single("logo_image"), prospect_controller.createprospect);

@@ -5,6 +5,8 @@ const { sanitizeBody } = require('express-validator/filter');
 const fs = require('fs');
 var multer  = require('multer')
 const hellosign = require('hellosign-sdk')({ key: '62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d' });
+var Color = require('color');
+const request = require('request');
 
 
 exports.viewprospect = function(req, res){
@@ -35,6 +37,7 @@ exports.createprospect = [
 
  // Process request after validation and sanitization.
  (req, res, next) => {
+   var color = Color(req.body.primary_color);
 
    const errors = validationResult(req);
    var prospect_name = encodeURI(req.body.name).replace(/%20/g,'-').replace('.','').toLowerCase();
@@ -61,52 +64,116 @@ exports.createprospect = [
       }
       else{
 
-        ///enter generic logo if not submitted
+        var first_color = "";
+        const opts = {
+          name: prospect.name,
+          domain: 'hellosign.com',
+          callback_url: 'http://www.google.com'
+          //ADD HELLOSIGN LOGO BELOW
+        // custom_logo_file: req.file.path
+        };
+        prospect.template = req.body.template;
+
         if(!req.file){
           prospect.logo = "public/siteimages/hellosign-white2.png";
           prospect.primary_color = "#00B3E6";
 
         }else{
-            prospect.logo = req.file.path;
-            prospect.primary_color = req.body.primary_color;
-            var whitelabel = JSON.stringify({link_color: prospect.primary_color, primary_button_color:prospect.primary_color,primary_button_color_hover: prospect.primary_color,secondary_button_text_color:prospect.primary_color,secondary_button_text_color_hover:prospect.primary_color});
+                prospect.logo = req.file.path;
+                prospect.primary_color = req.body.primary_color;
+              //  var whitelabel = JSON.stringify({link_color: prospect.primary_color, primary_button_color:prospect.primary_color,primary_button_color_hover: prospect.primary_color,secondary_button_text_color:prospect.primary_color,secondary_button_text_color_hover:prospect.primary_color});
 
-        }
+                  if(color.contrast(Color("#F7F8F9")) > 2.1 && color.contrast(Color("#1A1A1A")) > 2.1){
+                    first_color = req.body.primary_color;
+                    console.log("COLOR OKAY");
+                  }else {
+                  first_color = "#808080";
+                    console.log("COLOR NOT NOT NOT OKAY");
 
+                  }
+                  // if(req.body.secondary_color == "black"){
+                  //
+                  //
+                  // }else {
+                  //
+                  // }
 
-        const opts = {
-          name: prospect.name,
-          domain: 'hellosign.com',
-          callback_url: 'http://www.google.com',
-          white_labeling_options: whitelabel,
-          custom_logo_file: req.file.path
-        };
-
-
-
-          console.log(opts);
-          hellosign.apiApp.create(opts, function(err, ress){
-              if (err) {
-                  //do something with error
-                    prospect.api_app = err;
-                    console.log("ERROR MANNNNN" + err);
-
-              } else {
-
-                  prospect.api_app = ress.api_app.client_id;
+                  var whitelabel = JSON.stringify({primary_button_color:first_color, secondary_button_text_color:first_color});
 
 
 
 
 
-                  prospect.save(function(err){
-                    if(err){return next(err);}
 
-                    res.redirect(prospect_name);
-                  });
+                opts.white_labeling_options = whitelabel;
+                opts.custom_logo_file = fs.createReadStream(req.file.path);
+          }
 
-              }
-          });
+
+
+
+        //  request.post('https://api.hellosign.com/v3/api_app').form(opts)
+          ///////
+          /////
+          ////NEW/////
+          request({
+           method: 'POST',
+           uri: 'https://api.hellosign.com/v3/api_app',
+           auth: {
+               'user': "62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d",
+               'pass': ''
+           },
+           formData:opts
+       }, function (error, response, body) {
+           if(error){
+               console.log("ERROR: " + error);
+           }else{
+             var dat = JSON.parse(body);
+             console.log("DAT:  " + dat.api_app.client_id);
+
+               prospect.api_app = dat.api_app.client_id;
+               prospect.save(function(err){
+                         if(err){return next(err);}
+
+                         res.redirect(prospect_name);
+                       });
+
+           }
+       });
+
+       ////////////
+       //////////
+       /////////
+
+
+          ///////////////////////////////////////////////
+          ///////////////ORIGINAL////////////////////////
+          ///////////////////////////////////////////////
+          // hellosign.apiApp.create(opts, function(err, ress){
+          //     if (err) {
+          //         //do something with error
+          //           prospect.api_app = err;
+          //           console.log("ERROR MANNNNN" + err);
+          //
+          //
+          //     } else {
+          //
+          //         prospect.api_app = ress.api_app.client_id;
+          //
+          //
+          //
+          //
+          //
+          //         prospect.save(function(err){
+          //           if(err){return next(err);}
+          //
+          //           res.redirect(prospect_name);
+          //         });
+          //
+          //     }
+          // });
+          /////////////////////////////////////////////
+          ///////////////////////////////////////////////
 
 
 
@@ -209,11 +276,33 @@ exports.mergefields = function(req, res){
                       value: req.body.address
                     }
                   ]);
+        var temp;
+        console.log(found_prospect.template);
+
+        switch(found_prospect.template){
+          case "NDA":
+              temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+          break;
+          case "MSA":
+            temp = "";
+            break;
+          case "EmpAck":
+            temp = "";
+            break;
+          case "Waiver":
+            temp = "";
+            break;
+          default:
+            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+
+        }
+
+
         const opts = {
             test_mode: 1,
             clientId: found_prospect.api_app,
         //  clientId: 'f44c47cb276a359ca39cb521b1248522',
-            template_id: '7096686fd33f54e6c69d0e445254a1cfaf3e3637',
+            template_id: temp,
             title: 'embedded draft test',
             subject: 'embedded draft test',
             message: 'embedded draft test',
@@ -314,28 +403,22 @@ exports.updatesite = function(req, res){
 
 
 exports.submit_updates = function(req, res){
-//  var company = JSON.stringify({$name:{$eq:req.params.company}});
-//  console.log(company);
-//  var update = JSON.stringify({logo: req.file.path, primary_color: req.params.primary_color })
-//console.log(update);
-// Customer.findOne({name: company})
-//   .exec( function(err, found_prospect){
-//     if(err){return next(err);}
-//     if(found_prospect){
-//       console.log(found_prospect);
-//       Customer.updateOne({_id:found_prospect._id},{$set: {"primary_color": "#ffffff"}});
-//
-//       res.render('home', { title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
-//     } else{
-//
-//       res.render('/', {layout: 'layout'});
-//
-//     }
-//   });
 
 var company = req.params.company;
-var whitelabel = JSON.stringify({link_color: req.body.primary_color, primary_button_color:req.body.primary_color,primary_button_color_hover:req.body.primary_color,secondary_button_text_color:req.body.primary_color,secondary_button_text_color_hover:req.body.primary_color});
+var color = Color(req.body.primary_color);
+var first_color = "";
+console.log("this is the color" + color);
+
+if(color.contrast(Color("#F7F8F9")) > 2.1 && color.contrast(Color("#1A1A1A")) > 2.1){
+  first_color = req.body.primary_color;
+  console.log("COLOR OKAY");
+}else {
+first_color = "#808080";
+  console.log("COLOR NOT NOT NOT OKAY");
+}
+var whitelabel = JSON.stringify({primary_button_color: first_color, secondary_button_text_color:first_color});
 var opts = {white_labeling_options:whitelabel};
+
 
 Customer.findOne({name: company})
   .exec( function(err, found_prospect){
@@ -343,26 +426,69 @@ Customer.findOne({name: company})
     if(found_prospect){
       console.log(found_prospect);
 
-      hellosign.apiApp.update(found_prospect.api_app, opts).then((res) => {
-                // handle respons
-
-              }).catch((err) => {
-                // handle error
-              });
 
       if(!req.file){
         Customer.updateOne({name:{$eq:req.params.company}},{$set: {primary_color: req.body.primary_color }}, (err, item) => {
 
 
 
-            res.redirect("/"+req.params.company);
+          hellosign.apiApp.update(found_prospect.api_app, opts).then((ress) => {
+                    // handle respon
+                    res.redirect("/"+req.params.company);
+
+                  }).catch((err) => {
+                    // handle error
+                    console.log(err);
+                  });
             });
 
       }else{
     //Customer.updateOne({"name": company},{$set: {"primary_color": "#ffffff"}});
     Customer.updateOne({name:{$eq:req.params.company}},{$set: {logo: req.file.path, primary_color: req.body.primary_color }}, (err, item) => {
      console.log(item)
-     res.redirect("/"+req.params.company);
+     // res.redirect("/"+req.params.company);
+
+     opts.custom_logo_file = fs.createReadStream(req.file.path);
+
+     request({
+      method: 'POST',
+      uri: 'https://api.hellosign.com/v3/api_app/' + found_prospect.api_app,
+      auth: {
+          'user': "62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d",
+          'pass': ''
+      },
+      formData:opts
+  }, function (error, response, body) {
+      if(error){
+          console.log("ERROR: " + error);
+      }else{
+        var dat = JSON.parse(body);
+        console.log("DAT:  " + dat.api_app.client_id);
+        res.redirect("/"+req.params.company);
+
+      }
+  });
+
+
+
+     ///////////ORIGINAL//////////
+     /////////////////////////////
+     // hellosign.apiApp.update(found_prospect.api_app, opts).then((ress) => {
+     //           // handle respons
+     //
+     //
+     //           ////UPDATE LOGO image
+     //
+     //
+     //
+     //           res.redirect("/"+req.params.company);
+     //
+     //         }).catch((err) => {
+     //           // handle error
+     //         });
+     ////////////////////////////////
+     ////////////////////////////////
+
     });
     }
 

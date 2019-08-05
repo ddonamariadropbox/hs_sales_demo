@@ -6,6 +6,7 @@ var schema = new Schema({
  name: {type: String, required: true},
  logo: String,
  primary_color: String,
+ secondary_color: String,
  api_app: String,
  template: String
 });
