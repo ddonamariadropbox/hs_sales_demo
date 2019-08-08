@@ -284,16 +284,16 @@ exports.mergefields = function(req, res){
               temp = "db40729f650411552a2656e1d630ff40e150ceb8";
           break;
           case "MSA":
-            temp = "";
+            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
             break;
           case "EmpAck":
-            temp = "";
+            temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
             break;
           case "Waiver":
-            temp = "";
+            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
             break;
           default:
-            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+            temp = "db40729f650411552a2656e1d630ff40e150ceb8";
 
         }
 
@@ -407,14 +407,14 @@ exports.submit_updates = function(req, res){
 var company = req.params.company;
 var color = Color(req.body.primary_color);
 var first_color = "";
-console.log("this is the color" + color);
+//console.log("this is the color" + color);
 
 if(color.contrast(Color("#F7F8F9")) > 2.1 && color.contrast(Color("#1A1A1A")) > 2.1){
   first_color = req.body.primary_color;
-  console.log("COLOR OKAY");
+  //console.log("COLOR OKAY");
 }else {
 first_color = "#808080";
-  console.log("COLOR NOT NOT NOT OKAY");
+  //console.log("COLOR NOT NOT NOT OKAY");
 }
 var whitelabel = JSON.stringify({primary_button_color: first_color, secondary_button_text_color:first_color});
 var opts = {white_labeling_options:whitelabel};
@@ -425,10 +425,17 @@ Customer.findOne({name: company})
     if(err){return next(err);}
     if(found_prospect){
       console.log(found_prospect);
+      var new_temp = "";
+
+      if(!req.body.template){
+        new_temp = found_prospect.template;
+      } else{
+        new_temp = req.body.template;
+      }
 
 
       if(!req.file){
-        Customer.updateOne({name:{$eq:req.params.company}},{$set: {primary_color: req.body.primary_color }}, (err, item) => {
+        Customer.updateOne({name:{$eq:req.params.company}},{$set: {primary_color: req.body.primary_color, template: new_temp }}, (err, item) => {
 
 
 
@@ -444,7 +451,7 @@ Customer.findOne({name: company})
 
       }else{
     //Customer.updateOne({"name": company},{$set: {"primary_color": "#ffffff"}});
-    Customer.updateOne({name:{$eq:req.params.company}},{$set: {logo: req.file.path, primary_color: req.body.primary_color }}, (err, item) => {
+    Customer.updateOne({name:{$eq:req.params.company}},{$set: {logo: req.file.path, primary_color: req.body.primary_color, template: new_temp }}, (err, item) => {
      console.log(item)
      // res.redirect("/"+req.params.company);
 
