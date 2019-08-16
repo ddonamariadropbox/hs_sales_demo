@@ -38,6 +38,7 @@
 
                        HelloSign.init(response.clientid);
                       	HelloSign.open({"url": response.url,
+                        "debug": true,
                             // "skipDomainVerification": true,
                             messageListener: function(eventData){
                                       //handle callback
