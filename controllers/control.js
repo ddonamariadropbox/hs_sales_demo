@@ -279,20 +279,32 @@ exports.mergefields = function(req, res){
         var temp;
         console.log(found_prospect.template);
 
-        switch(found_prospect.template){
-          case 'NDA':
+        // switch(found_prospect.template){
+        //   case 'NDA':
+        //       temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+        //       break;
+        //   case 'MSA':
+        //     temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+        //     break;
+        //   case 'EmpAck':
+        //     temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
+        //     break;
+        //   case 'Waiver':
+        //     temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+        //     break;
+        //   default:
+        //     temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+        //
+        // }
+        if(found_prospect.template == "NDA"){
               temp = "db40729f650411552a2656e1d630ff40e150ceb8";
-              break;
-          case 'MSA':
+            }else if(found_prospect.template == "MSA"){
             temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-            break;
-          case 'EmpAck':
+          }else if(found_prospect.template == "EmpAck"){
             temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
-            break;
-          case 'Waiver':
+        }else if(found_prospect.template == "Waiver"){
             temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
-            break;
-          default:
+          } else {
             temp = "db40729f650411552a2656e1d630ff40e150ceb8";
 
         }
@@ -331,14 +343,9 @@ console.log(temp);
                 return hellosign.embedded.getSignUrl(signatureId);
               })
               .then(function(response){
-                //  console.log('URL = ' + response.embedded.sign_url);
-                //  console.log("{\"url\":\"" + response.embedded.sign_url + "\"}");
-                //  var json_res = "{\"url\":\"" + response.embedded.sign_url + "\"}";
                 var json_res = JSON.stringify({url: response.embedded.sign_url, clientid: found_prospect.api_app});
                 res.end(json_res);
-                  // HelloSign.init(found_prospect.api_app);
-                  // HelloSign.open({"url": response.embedded.sign_url, "skipDomainVerification": true});
-                //  actuallyopen(found_prospect.api_app, response.embedded.sign_url);
+
               })
               .catch(function(err){
                 console.log(err);
