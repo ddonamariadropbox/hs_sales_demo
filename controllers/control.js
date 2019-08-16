@@ -342,7 +342,7 @@ exports.mergefields = function(req, res){
               })
               .catch(function(err){
                 console.log(err);
-
+                res.render('/');
                                   //catch error
               });
 
