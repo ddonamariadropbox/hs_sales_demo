@@ -419,12 +419,7 @@ first_color = "#808080";
 }
 var whitelabel = JSON.stringify({primary_button_color: first_color, secondary_button_text_color:first_color});
 var opts = {white_labeling_options:whitelabel};
-var new_temp = "";
-if(req.body.template == "dontchange"){
-  new_temp = found_prospect.template;
-} else{
-  new_temp = req.body.template;
-}
+
 
 Customer.findOne({name: company})
   .exec( function(err, found_prospect){
@@ -432,7 +427,13 @@ Customer.findOne({name: company})
     if(found_prospect){
       console.log(found_prospect);
 
+      var new_temp = "";
 
+      if(req.body.template == "dontchange"){
+        new_temp = found_prospect.template;
+      } else{
+        new_temp = req.body.template;
+      }
 
 
       if(!req.file){
