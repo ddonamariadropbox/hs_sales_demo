@@ -349,6 +349,7 @@ console.log(temp);
 
       //  res.render('layouts/signup', { title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, c_id: found_prospect.client_id, layout: 'layout'});
       } else{
+        res.render('/');
         //res.render('layouts/signup', { title: "NOPE" , customer_logo: "didnt work", layout: 'layout'});
       }
     });
