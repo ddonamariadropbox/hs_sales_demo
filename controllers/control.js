@@ -81,22 +81,13 @@ exports.createprospect = [
         }else{
                 prospect.logo = req.file.path;
                 prospect.primary_color = req.body.primary_color;
-              //  var whitelabel = JSON.stringify({link_color: prospect.primary_color, primary_button_color:prospect.primary_color,primary_button_color_hover: prospect.primary_color,secondary_button_text_color:prospect.primary_color,secondary_button_text_color_hover:prospect.primary_color});
 
                   if(color.contrast(Color("#F7F8F9")) > 2.1 && color.contrast(Color("#1A1A1A")) > 2.1){
                     first_color = req.body.primary_color;
-                    console.log("COLOR OKAY");
                   }else {
                   first_color = "#808080";
-                    console.log("COLOR NOT NOT NOT OKAY");
-
                   }
-                  // if(req.body.secondary_color == "black"){
-                  //
-                  //
-                  // }else {
-                  //
-                  // }
+
 
                   var whitelabel = JSON.stringify({primary_button_color:first_color, secondary_button_text_color:first_color});
 
@@ -141,50 +132,6 @@ exports.createprospect = [
            }
        });
 
-       ////////////
-       //////////
-       /////////
-
-
-          ///////////////////////////////////////////////
-          ///////////////ORIGINAL////////////////////////
-          ///////////////////////////////////////////////
-          // hellosign.apiApp.create(opts, function(err, ress){
-          //     if (err) {
-          //         //do something with error
-          //           prospect.api_app = err;
-          //           console.log("ERROR MANNNNN" + err);
-          //
-          //
-          //     } else {
-          //
-          //         prospect.api_app = ress.api_app.client_id;
-          //
-          //
-          //
-          //
-          //
-          //         prospect.save(function(err){
-          //           if(err){return next(err);}
-          //
-          //           res.redirect(prospect_name);
-          //         });
-          //
-          //     }
-          // });
-          /////////////////////////////////////////////
-          ///////////////////////////////////////////////
-
-
-
-
-
-
-    // prospect.save(function(err){
-    //   if(err){return next(err);}
-    //
-    //   res.redirect(prospect_name);
-    // });
 
   }
 });
@@ -276,7 +223,7 @@ exports.mergefields = function(req, res){
                       value: req.body.address
                     }
                   ]);
-        var temp;
+        var temp = "";
         console.log(found_prospect.template);
 
         // switch(found_prospect.template){
@@ -313,7 +260,6 @@ console.log(temp);
         const opts = {
             test_mode: 1,
             clientId: found_prospect.api_app,
-        //  clientId: 'f44c47cb276a359ca39cb521b1248522',
             template_id: temp,
             title: 'embedded draft test',
             subject: 'embedded draft test',
