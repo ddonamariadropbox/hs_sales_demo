@@ -280,16 +280,16 @@ exports.mergefields = function(req, res){
         console.log(found_prospect.template);
 
         switch(found_prospect.template){
-          case "NDA":
+          case 'NDA':
               temp = "db40729f650411552a2656e1d630ff40e150ceb8";
           break;
-          case "MSA":
+          case 'MSA':
             temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
             break;
-          case "EmpAck":
+          case 'EmpAck':
             temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
             break;
-          case "Waiver":
+          case 'Waiver':
             temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
             break;
           default:
@@ -342,7 +342,8 @@ exports.mergefields = function(req, res){
               })
               .catch(function(err){
                 console.log(err);
-                  //catch error
+
+                                  //catch error
               });
 
 
