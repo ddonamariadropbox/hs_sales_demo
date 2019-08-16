@@ -504,7 +504,7 @@ Customer.findOne({name: company})
 
     } else{
 
-
+res.redirect("/");
     }
   });
 
