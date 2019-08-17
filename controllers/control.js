@@ -243,26 +243,26 @@ exports.mergefields = function(req, res){
         //     temp = "db40729f650411552a2656e1d630ff40e150ceb8";
         //
         // }
-        // if(found_prospect.template == "NDA"){
-        //       temp = "db40729f650411552a2656e1d630ff40e150ceb8";
-        // //  temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-        //
-        //     }else if(found_prospect.template == "MSA"){
-        //     temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-        //   }else if(found_prospect.template == "EmpAck"){
-        //     temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
-        // }else if(found_prospect.template == "Waiver"){
-        //     temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
-        //   } else {
-        //     temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-        //
-        // }
+        if(found_prospect.template == "NDA"){
+              temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+        //  temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+
+            }else if(found_prospect.template == "MSA"){
+            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+          }else if(found_prospect.template == "EmpAck"){
+            temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
+        }else if(found_prospect.template == "Waiver"){
+            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+          } else {
+            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+
+        }
 
 console.log(temp);
         const opts = {
             test_mode: 1,
             clientId: found_prospect.api_app,
-            template_id: 'db40729f650411552a2656e1d630ff40e150ceb8',
+            template_id: temp,
             title: 'embedded draft test',
             subject: 'embedded draft test',
             message: 'embedded draft test',
