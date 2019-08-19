@@ -68,7 +68,7 @@ exports.createprospect = [
         const opts = {
           name: prospect.name,
           domain: 'apidemo.hellosign.com',
-          callback_url: 'apidemo.hellosign.com'
+          callback_url: 'http://www.google.com'
           //ADD HELLOSIGN LOGO BELOW
         // custom_logo_file: req.file.path
         };
@@ -120,6 +120,7 @@ exports.createprospect = [
                console.log("ERROR: " + error);
            }else{
              var dat = JSON.parse(body);
+             console.log(body);
              console.log("DAT:  " + dat.api_app.client_id);
 
                prospect.api_app = dat.api_app.client_id;
