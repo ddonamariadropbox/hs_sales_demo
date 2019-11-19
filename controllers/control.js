@@ -267,7 +267,7 @@ console.log(temp);
             title: 'embedded draft test',
             subject: 'embedded draft test',
             message: 'embedded draft test',
-            signing_redirect_url: company.url,
+          //  signing_redirect_url: company.url,
             requester_email_address: 'michaelphaley@gmail.com',
 
 
@@ -315,26 +315,6 @@ console.log(temp);
 }
 
 
-
-
-exports.createtemplate = function(req, res){
-  var company = req.params.company;
-
-  Customer.findOne({name: company})
-    .exec( function(err, found_prospect){
-      if(err){return next(err);}
-      if(found_prospect){
-        console.log(found_prospect);
-
-
-        res.render('layouts/createtemplate', { title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
-      } else{
-
-        res.render('createtemplate', {layout: 'layout'});
-
-      }
-    });
-}
 
 
 exports.updatesite = function(req, res){
@@ -497,6 +477,124 @@ exports.dashboards = function(req, res){
 
       }
     });
+
+
+
+}
+
+exports.createtemplate = function(req, res){
+  var company = req.params.company;
+
+  Customer.findOne({name: company})
+    .exec( function(err, found_prospect){
+      if(err){return next(err);}
+      if(found_prospect){
+        console.log(found_prospect);
+
+        res.render('layouts/createtemplate', { title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
+      } else{
+
+        res.render('createtemplate', {layout: 'layout'});
+
+      }
+    });
+}
+
+exports.assignorder = function(req,res){
+  var company = req.params.company;
+
+  Customer.findOne({name: company})
+    .exec( function(err, found_prospect){
+      if(err){return next(err);}
+      if(found_prospect){
+        console.log(req.body.numofsign); //
+        var signer_num = req.body.numofsign;
+
+        //var template_file = fs.createReadStream(req.file.path).path;
+      //  console.log(template_file);
+      //  res.render('layouts/signerorder', { signers: signer_num, temp_file: template_file, title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
+       res.render('layouts/signerorder', { signers: req.body.numofsign, title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
+      } else{
+
+      //  res.render('createtemplate', {layout: 'layout'});
+
+      }
+    });
+}
+
+exports.launchtemp = function(req,res){
+
+// console.log("DUH");
+// console.log(req.body);
+//var body = JSON.parse(JSON.stringify(req.body));
+//console.log(body);
+//var signers = JSON.stringify(req.body.signers);
+var template_file = fs.createReadStream(req.file.path).path;
+
+var signers = JSON.parse(req.body.signers);
+var company = req.body.company;
+Customer.findOne({name: company})
+  .exec( function(err, found_prospect){
+    if(err){return next(err);}
+    if(found_prospect){
+
+
+
+      const opts = {
+        test_mode: 1,
+        clientId: found_prospect.api_app,
+        title: req.body.title,
+        subject: req.body.title,
+        message: req.body.message,
+        // signer_roles: [
+        //   {
+        //     name: 'Manager',
+        //     order: 0
+        //   },
+        //   {
+        //     name: 'Employee',
+        //     order: 1
+        //   }
+        // ],
+         signer_roles: signers,
+        files: [template_file]
+      };
+
+//      var s_signers = JSON.stringify(req.body.signers);
+    //  s_signers = JSON.parse(s_signers);
+
+
+      console.log("Response time");
+      console.log(opts);
+
+
+    const results = hellosign.template.createEmbeddedDraft(opts).then((response) => {
+      // handle response
+      console.log("were in it");
+
+        console.log(response.template);
+        var json_res = JSON.stringify({edit_url: response.template.edit_url, template_id: response.template.template_id, clientid: found_prospect.api_app});
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(json_res);
+
+    }).catch((err) => {
+      console.log(err);
+      // handle error
+    });
+
+
+console.log(results);
+  //    res.render('', { title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
+
+    } else{
+
+    //  res.render('createtemplate', {layout: 'layout'});
+
+    }
+  });
+
+
+
 
 
 
