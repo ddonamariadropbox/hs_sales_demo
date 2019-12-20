@@ -1,0 +1,186 @@
+
+
+
+
+</br>
+</br>
+<center><h1>Create a Template:</h1></center>
+
+
+
+
+<div class="submitter">
+
+<form id="launchtemplateframe" action="/launch_template"  method="POST" enctype="multipart/form-data">
+
+<center>
+    <label for="file">Upload template doc:</label>
+
+    <input type="file" name="template_file" required>
+  </br>
+
+</br>
+    <input type="hidden" id="company" name="company" value="{{title}}">
+    <!-- <button type="submit" value="Submit">Launch Template Builder</button> -->
+    <input type="submit" value="Launch Template Builder" >
+
+    <!-- <input type="button" value="hey" onclick="temp_open()"> -->
+</center>
+</form>
+</div>
+<center>
+<h2> Pre-defined fields:</h2>
+<h4>Full Name</h4>
+<h4>Company</h4>
+</center>
+
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="https://s3.amazonaws.com/cdn.hellosign.com/public/js/hellosign-embedded.LATEST.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+ <script src="http://malsup.github.com/jquery.form.js"></script>
+
+<script>
+
+
+
+$(document).ready(function() {
+  //console.log("{{signers}}");
+  var x = $('.item');
+
+  for(var i = 0; i< ({{signers}} - 1); i++){
+    x.clone().insertAfter(x);
+
+  }
+  // $('#launchtemplateframe').ajaxForm(function(e) {
+  //
+  //
+  //
+  //
+  //                 alert("Thank you for your comment!" + e.res);
+  //             });
+  $('#launchtemplateframe').ajaxForm({
+    success: function(response, status, xhr, form) {
+      // alert("Thank you for your comment! " + res.edit_url);
+              HelloSign.init(response.clientid);
+                	HelloSign.open({"url": response.edit_url,
+                  "skipDomainVerification": true,
+                  "debug": false,
+                  messageListener: function(eventData){
+                            //handle callback
+                      if(eventData.event == HelloSign.EVENT_TEMPLATE_CREATED){
+                          //document.location = "/{{title}}/";
+                          // $.ajax({
+                          //         type:'GET',
+                          //         url:'/{{title}}/usetemplate',
+                          //         data:{id:eventData.template_id, name:eventData.template_info.title},
+                          //         success: function(response){
+                          //
+                          //         }
+                          //       });
+                        //  $.post("/{{title}}/usetemplate", {id:eventData.template_id, name:eventData.template_info.title});
+
+
+                          window.location.replace('/{{title}}/' + eventData.template_id);
+                      }
+
+
+                    }
+                });
+    }
+
+  });
+
+
+//   $('launchtemplateframe').submit(function(e){
+//     e.preventDefault();
+// // function temp_open(){
+//
+//     console.log("HERE WE GOOOOOOO");
+//       var data = {};
+//       //first element is # of signers, followed by roles, title, message
+//       var x = document.getElementById('launchtemplateframe');
+//       var text = [];
+//       for(var i=0; i<x.length -3; i++){
+//       //text[i] = x.elements[i].value;
+//
+//        text.push({name: x.elements[i].value, order: i});
+//
+//       }
+//
+//       data.signers = JSON.stringify(text);
+//       //data.signers = text;
+//       data.num_signers = {{signers}};
+//       var len = x.length;
+//       data.title = x.elements[len -4].value;
+//       data.message = x.elements[len -3].value;
+//       data.company = "{{title}}";
+//        var tf = fs.createReadStream(x.elements[len -2].value).path;
+//        data.template_file = tf;
+//       // data.doc = x.elements[len -2].value;;
+//       console.log(data);
+//       var fd = new FormData($("launchtemplateframe".get(0)));
+//
+//
+//       $.ajax({
+//                 type:'POST',
+//                 url:'/launch_template',
+//                  enctype: 'multipart/form-data',
+//                  processData: false,
+//                  contentType: false,
+//                  data: fd ,
+//
+//                  success: function(response) {
+//
+//
+//                    console.log(response);
+//                     HelloSign.init(response.clientid);
+//                     	HelloSign.open({"url": response.edit_url,
+//                       "skipDomainVerification": true,
+//                       "debug": true,
+//                       messageListener: function(eventData){
+//                                 //handle callback
+//                           if(eventData.event == HelloSign.EVENT_TEMPLATE_CREATED){
+//                               document.location = "/{{title}}/dashboards";
+//                           }
+//
+//
+//                         }
+//                     });
+//
+//                  },
+//                  dataType: 'json'
+//
+//              });
+//
+//
+//   });
+//
+
+
+
+
+
+  $('.move').children().click(function (e) {
+     var $div = $(this).closest('.item');
+     if ($(e.target).is('.move-down')) {
+         $div.next('.item').after($div);
+     } else {
+         $div.prev('.item').before($div);
+     }
+  });
+
+
+});
+
+
+
+
+</script>
+<style>
+
+input[type=submit] {
+  background-color: {{primary_color}};
+
+}
+</style>

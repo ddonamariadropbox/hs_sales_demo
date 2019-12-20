@@ -1,0 +1,72 @@
+
+</br>
+</br>
+
+</br>
+
+<center><h1>Send signature request from template:</h1></center>
+
+<div class="submitter">
+
+<form id="requestsig" action="/launch_request"  method="POST" enctype="application/x-www-form-urlencoded">
+  <!-- <form id="requestsig" action="#"  onsubmit="launchsigreq();returnfalse;"> -->
+
+<center>
+  <label>Signer Email:</label>
+</br>
+</br>
+
+
+  <input type="text"  id="email" name= "email" placeholder="Signer Email Address..." required>
+  <input type="hidden" id="company" name="company" value="{{title}}">
+</br>
+</br>
+
+<input type="submit" value="Send Request" >
+
+  <!-- <button type="submit" value="Submit">Send Request</button> -->
+  <!-- <input type="button" value="hey" onclick="temp_open()"> -->
+</center>
+</form>
+
+</div>
+
+<script type="text/javascript" src="https://s3.amazonaws.com/cdn.hellosign.com/public/js/hellosign-embedded.LATEST.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+ <script src="http://malsup.github.com/jquery.form.js"></script>
+
+<script>
+
+$(document).ready(function(){
+
+ $('#requestsig').ajaxForm({
+// function launchsigreq(){
+  success: function(response, status, xhr, form){
+    // alert("Thank you for your comment! " + res.edit_url);
+              //console.log(response);
+                HelloSign.init(response.clientid);
+                HelloSign.open({url: response.claim_url,
+                skipDomainVerification: true,
+                debug: false,
+                messageListener: function(eventData){
+                          //handle callback
+                    if(eventData.event == HelloSign.EVENT_SENT){
+                         window.location.replace('/{{title}}/' + "requestsent");
+                    }
+
+
+                  }
+              });
+  }
+
+ });
+ });
+
+</script>
+<style>
+
+input[type=submit] {
+  background-color: {{primary_color}};
+
+}
+</style>

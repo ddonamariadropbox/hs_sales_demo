@@ -5,21 +5,66 @@
 
 </br>
 
-<form action="/submit" method="post" enctype="multipart/form-data">
+<!-- <form action="/submit" method="post" enctype="multipart/form-data">
 
   <label for="template_name">Template Name:</label>
   <input type="text" id="template_name"  name="name" placeholder="Template name...">
   </br>
   <label for="template_file">Upload template file:</label>
   <input type="file" name="template_file">
+  </br> -->
+  <h1>Create a template:</h1>
+
+  <!-- <form id="embeddedTemplateForm" action="/upload_temp" method="post"> -->
+  <!-- enctype="multipart/form-data" -->
+<form action="/{{title}}/assignorder" method="POST" >
+<!-- <label for="file">Upload template doc:</label>
+    <input type="file" name="template_file" > -->
+</br>
+</br>
+  <label for="numofsign">Number of signers?</label>
+  <input name="numofsign" type="number">
+
   </br>
-
-
-
-
-
-
+  </br>
 
   <input type="submit" value="SUBMIT" >
 
 </form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+$('.add').click(function(){
+           $('<div class="item"><input type="text" name="roles"><div class="move"><div class="move-up">up</div><div class="move-down">down</div></div><span class="remove">Remove</span></br></br></div>').insertBefore($(this));
+           $('.remove').show();
+           $('.remove').click(function(){
+               console.log('clicked');
+               $(this).parent().remove();
+           });
+       });
+
+
+
+
+  $('.move').children().click(function (e) {
+     var $div = $(this).closest('.item');
+     if (jQuery(e.target).is('.move-down')) {
+         $div.next('.item').after($div);
+     } else {
+         $div.prev('.item').before($div);
+     }
+ });
+
+
+// $(".add").click(function() {
+//     $("form > p:first-child").clone(true).insertBefore("form > p:last-child");
+//     return false;
+// });
+//
+// $(".remove").click(function() {
+//     $(this).parent().remove();
+// });
+
+
+</script>

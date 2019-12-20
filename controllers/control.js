@@ -245,9 +245,8 @@ exports.mergefields = function(req, res){
         //
         // }
         if(found_prospect.template == "NDA"){
-              temp = "db40729f650411552a2656e1d630ff40e150ceb8";
-        //  temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-
+        temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+      //jennycraig    temp = "25895c82d457942c602f6cf9f469eb5e05cdcffe";
             }else if(found_prospect.template == "MSA"){
             temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
           }else if(found_prospect.template == "EmpAck"){
@@ -525,14 +524,20 @@ exports.assignorder = function(req,res){
 exports.launchtemp = function(req,res){
 
 // console.log("DUH");
-// console.log(req.body);
+//var f = fs.createReadStream(req.file.filename);
+//console.log("heyt" + f);
+
+ console.log(req.body);
+  console.log(req.file);
 //var body = JSON.parse(JSON.stringify(req.body));
 //console.log(body);
 //var signers = JSON.stringify(req.body.signers);
 var template_file = fs.createReadStream(req.file.path).path;
 
-var signers = JSON.parse(req.body.signers);
-var company = req.body.company;
+//var signers = JSON.parse(req.body.roles);
+// var signers = req.body.roles;
+ var company = req.body.company;
+console.log("about to find");
 Customer.findOne({name: company})
   .exec( function(err, found_prospect){
     if(err){return next(err);}
@@ -543,9 +548,13 @@ Customer.findOne({name: company})
       const opts = {
         test_mode: 1,
         clientId: found_prospect.api_app,
-        title: req.body.title,
-        subject: req.body.title,
-        message: req.body.message,
+        allow_reassign: 1,
+        allow_ccs: 1,
+        merge_fields: [{"name":"Full Name","type":"text"},{"name":"Company","type":"text"}],
+
+      //  title: req.body.title,
+        //subject: req.body.title,
+        //message: req.body.message,
         // signer_roles: [
         //   {
         //     name: 'Manager',
@@ -556,7 +565,7 @@ Customer.findOne({name: company})
         //     order: 1
         //   }
         // ],
-         signer_roles: signers,
+      //   signer_roles: signers,
         files: [template_file]
       };
 
@@ -571,11 +580,14 @@ Customer.findOne({name: company})
     const results = hellosign.template.createEmbeddedDraft(opts).then((response) => {
       // handle response
       console.log("were in it");
+      fs.unlink(template_file, (err) => {
 
         console.log(response.template);
         var json_res = JSON.stringify({edit_url: response.template.edit_url, template_id: response.template.template_id, clientid: found_prospect.api_app});
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(json_res);
+        if (err) throw err;
+    });
 
     }).catch((err) => {
       console.log(err);
@@ -587,8 +599,11 @@ console.log(results);
   //    res.render('', { title: company , customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, layout: 'layout'});
 
     } else{
-
+      console.log("didng find shit");
     //  res.render('createtemplate', {layout: 'layout'});
+    var json_res = JSON.stringify({edit_url: "whoa", template_id: "dumbdumb", clientid: "dummy"});
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(json_res);
 
     }
   });
@@ -598,4 +613,131 @@ console.log(results);
 
 
 
+}
+
+exports.usetemplate = function(req, res){
+  //console.log("WE BE CALLIN THE FUNCTION " + req.body.id + " Name: " + req.body.name);
+  console.log(req.params);
+  Customer.findOne({name: req.params.company})
+    .exec( function(err, found_prospect){
+      if(err){return next(err);}
+      if(found_prospect){
+
+  res.render('layouts/usetemplatenow', {templateid: req.params.tempid, title: req.params.company, customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, c_id: found_prospect.client_id, layout: 'layout'});
+}else{
+
+
+}
+});
+  //res.redirect(200, 'layouts/usetemplatenow');
+}
+
+exports.sendtemplaterequest = function(req,res){
+
+    //do what you need here
+    console.log("YO HEY");
+    Customer.findOne({name: req.params.company})
+      .exec( function(err, found_prospect){
+        if(err){return next(err);}
+        if(found_prospect){
+
+
+
+            res.render('layouts/requestfromtemp', { title: req.params.company, customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, c_id: found_prospect.client_id, layout: 'layout'});
+
+
+
+  }else{
+
+
+  }
+  });
+
+
+
+}
+
+
+exports.launchrequest = function(req,res){
+
+
+  Customer.findOne({name: req.body.company})
+    .exec( function(err, found_prospect){
+      if(err){return next(err);}
+      if(found_prospect){
+
+
+        console.log("were doing it111");
+        var temp = "";
+        if(found_prospect.template == "NDA"){
+            temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+          }else if(found_prospect.template == "MSA"){
+            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+          }else if(found_prospect.template == "EmpAck"){
+            temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
+          }else if(found_prospect.template == "Waiver"){
+            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+          } else {
+            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+          }
+
+          const opts = {
+            test_mode: 1,
+            clientId: found_prospect.api_app,
+            template_id: temp,
+            signers: [
+              {
+                email_address: req.body.email,
+                name: 'Client',
+                role: 'Client'
+
+              }
+            ],
+            requester_email_address: 'michaelphaley@gmail.com'
+          };
+
+          hellosign.unclaimedDraft.createEmbeddedWithTemplate(opts).then((response) => {
+            // handle response
+
+            console.log(response);
+            var json_res = JSON.stringify({claim_url: response.unclaimed_draft.claim_url, clientid: found_prospect.api_app});
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(json_res);
+
+          }).catch((err) => {
+            // handle error
+
+            console.log(err);
+          });
+
+
+
+
+        }else{
+
+
+        }
+});
+
+
+
+}
+
+exports.requestsent = function(req,res){
+  Customer.findOne({name: req.params.company})
+    .exec( function(err, found_prospect){
+      if(err){return next(err);}
+      if(found_prospect){
+
+
+
+          res.render('layouts/requestsent', { title: req.params.company, customer_logo: found_prospect.logo, primary_color: found_prospect.primary_color, c_id: found_prospect.client_id, layout: 'layout'});
+
+
+
+}else{
+
+
+}
+});
 }
