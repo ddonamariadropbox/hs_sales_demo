@@ -46,7 +46,7 @@ $(document).ready(function(){
               //console.log(response);
                 HelloSign.init(response.clientid);
                 HelloSign.open({url: response.claim_url,
-                skipDomainVerification: true,
+                //skipDomainVerification: true,
                 debug: false,
                 messageListener: function(eventData){
                           //handle callback

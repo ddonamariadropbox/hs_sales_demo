@@ -64,7 +64,7 @@ $(document).ready(function() {
       // alert("Thank you for your comment! " + res.edit_url);
               HelloSign.init(response.clientid);
                 	HelloSign.open({"url": response.edit_url,
-                  "skipDomainVerification": true,
+                //  "skipDomainVerification": true,
                   "debug": false,
                   messageListener: function(eventData){
                             //handle callback
