@@ -4,9 +4,10 @@ const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 const fs = require('fs');
 var multer  = require('multer')
-const hellosign = require('hellosign-sdk')({ key: '62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d' });
+const hellosign = require('hellosign-sdk')({ key: config.hellosignKey });
 var Color = require('color');
 const request = require('request');
+
 
 
 exports.viewprospect = function(req, res){
@@ -111,7 +112,7 @@ exports.createprospect = [
            method: 'POST',
            uri: 'https://api.hellosign.com/v3/api_app',
            auth: {
-               'user': "62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d",
+               'user': config.hellosignKey,
                'pass': ''
            },
            formData:opts
@@ -244,19 +245,33 @@ exports.mergefields = function(req, res){
         //     temp = "db40729f650411552a2656e1d630ff40e150ceb8";
         //
         // }
-        if(found_prospect.template == "NDA"){
-        temp = "db40729f650411552a2656e1d630ff40e150ceb8";
-      //jennycraig    temp = "25895c82d457942c602f6cf9f469eb5e05cdcffe";
-            }else if(found_prospect.template == "MSA"){
-            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-          }else if(found_prospect.template == "EmpAck"){
-            temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
-        }else if(found_prospect.template == "Waiver"){
-            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
-          } else {
-            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
 
-        }
+
+      //   if(found_prospect.template == "NDA"){
+      //   temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+      // //jennycraig    temp = "25895c82d457942c602f6cf9f469eb5e05cdcffe";
+      //       }else if(found_prospect.template == "MSA"){
+      //       temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+      //     }else if(found_prospect.template == "EmpAck"){
+      //       temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
+      //   }else if(found_prospect.template == "Waiver"){
+      //       temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+      //     } else {
+      //       temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+      //
+      //   }
+      if(found_prospect.template == "NDA"){
+      temp = config.NDA_temp;
+          }else if(found_prospect.template == "MSA"){
+          temp = config.MSA_temp;
+        }else if(found_prospect.template == "EmpAck"){
+          temp = config.EMPACK_temp;
+      }else if(found_prospect.template == "Waiver"){
+          temp = config.WAIVER_temp;
+        } else {
+          temp = config.NDA_temp;
+
+      }
 
 console.log(temp);
         const opts = {
@@ -400,7 +415,8 @@ Customer.findOne({name: company})
       method: 'POST',
       uri: 'https://api.hellosign.com/v3/api_app/' + found_prospect.api_app,
       auth: {
-          'user': "62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d",
+          // 'user': "62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d",
+          'user': config.hellosignKey,
           'pass': ''
       },
       formData:opts
@@ -669,17 +685,31 @@ exports.launchrequest = function(req,res){
 
         console.log("were doing it111");
         var temp = "";
+
+        // if(found_prospect.template == "NDA"){
+        //     temp = "db40729f650411552a2656e1d630ff40e150ceb8";
+        //   }else if(found_prospect.template == "MSA"){
+        //     temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+        //   }else if(found_prospect.template == "EmpAck"){
+        //     temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
+        //   }else if(found_prospect.template == "Waiver"){
+        //     temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+        //   } else {
+        //     temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+        //   }
+
         if(found_prospect.template == "NDA"){
-            temp = "db40729f650411552a2656e1d630ff40e150ceb8";
-          }else if(found_prospect.template == "MSA"){
-            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
+        temp = config.NDA_temp;
+            }else if(found_prospect.template == "MSA"){
+            temp = config.MSA_temp;
           }else if(found_prospect.template == "EmpAck"){
-            temp = "40805e5ea51af01a8e74725bb05d9b3c8b23428f";
-          }else if(found_prospect.template == "Waiver"){
-            temp = "7096686fd33f54e6c69d0e445254a1cfaf3e3637";
+            temp = config.EMPACK_temp;
+        }else if(found_prospect.template == "Waiver"){
+            temp = config.WAIVER_temp;
           } else {
-            temp = "ca1989e7b570dd82fd6019519d8b85572f99ff3c";
-          }
+            temp = config.NDA_temp;
+
+        }
 
           const opts = {
             test_mode: 1,

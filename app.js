@@ -7,6 +7,10 @@ var mongoose = require('mongoose');
 //var hbs = require('hbs');
 var expressHbs = require('express-handlebars');
 const fs = require('fs');
+config = require('./config');
+
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 rootpath = __dirname.toString();
 

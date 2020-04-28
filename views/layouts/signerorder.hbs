@@ -36,9 +36,12 @@
 
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-<script type="text/javascript" src="https://s3.amazonaws.com/cdn.hellosign.com/public/js/hellosign-embedded.LATEST.min.js"></script>
+<!-- <script type="text/javascript" src="https://s3.amazonaws.com/cdn.hellosign.com/public/js/hellosign-embedded.LATEST.min.js"></script> -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
  <script src="http://malsup.github.com/jquery.form.js"></script>
+
+ <script src="https://cdn.hellosign.com/public/js/embedded/v2.0.0/embedded.production.min.js"></script>
+
 
 <script>
 
@@ -62,31 +65,36 @@ $(document).ready(function() {
   $('#launchtemplateframe').ajaxForm({
     success: function(response, status, xhr, form) {
       // alert("Thank you for your comment! " + res.edit_url);
-              HelloSign.init(response.clientid);
-                	HelloSign.open({"url": response.edit_url,
-                //  "skipDomainVerification": true,
-                  "debug": false,
-                  messageListener: function(eventData){
-                            //handle callback
-                      if(eventData.event == HelloSign.EVENT_TEMPLATE_CREATED){
-                          //document.location = "/{{title}}/";
-                          // $.ajax({
-                          //         type:'GET',
-                          //         url:'/{{title}}/usetemplate',
-                          //         data:{id:eventData.template_id, name:eventData.template_info.title},
-                          //         success: function(response){
-                          //
-                          //         }
-                          //       });
-                        //  $.post("/{{title}}/usetemplate", {id:eventData.template_id, name:eventData.template_info.title});
 
+                // HelloSign.init(response.clientid);
+                // 	HelloSign.open({"url": response.edit_url,
+                // //  "skipDomainVerification": true,
+                //   "debug": false,
+                //   messageListener: function(eventData){
+                //             //handle callback
+                //       if(eventData.event == HelloSign.EVENT_TEMPLATE_CREATED){
+                //
+                //           window.location.replace('/{{title}}/' + eventData.template_id);
+                //       }
+                //
+                //
+                //     }
+                // });
 
-                          window.location.replace('/{{title}}/' + eventData.template_id);
-                      }
-
-
-                    }
+                //embedded v2
+                const client = new HelloSign({
+                    clientId: response.clientid
                 });
+                client.open(response.edit_url, {
+                  skipDomainVerification: true
+
+                });
+
+                client.on('createTemplate', (data) => {
+                  window.location.replace('/{{title}}/' + data.templateId);
+                });
+
+
     }
 
   });
