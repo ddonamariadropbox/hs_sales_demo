@@ -65,7 +65,7 @@ $(document).ready(function(){
 
               client.open(response.claim_url, {
                 clientId: response.clientid,
-                skipDomainVerification: true
+                // skipDomainVerification: true
               });
               client.on('send', (data) => {
                  window.location.replace('/{{title}}/' + "requestsent");

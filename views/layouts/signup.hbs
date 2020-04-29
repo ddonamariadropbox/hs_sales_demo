@@ -55,7 +55,7 @@
 
                         client.open(response.url, {
                          clientId: response.clientid,
-                         skipDomainVerification: true,
+                         // skipDomainVerification: true,
                         });
                         client.on('sign', (data) => {
                           document.location = "/{{title}}/dashboards";
