@@ -415,7 +415,6 @@ Customer.findOne({name: company})
       method: 'POST',
       uri: 'https://api.hellosign.com/v3/api_app/' + found_prospect.api_app,
       auth: {
-          // 'user': "62d64b18e4825ad17f29ffbfe6b4946748399801dd0cf51ffa2cd2620bdf367d",
           'user': config.hellosignKey,
           'pass': ''
       },
