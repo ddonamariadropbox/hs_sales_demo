@@ -654,7 +654,7 @@ exports.launchrequest = function(req,res){
         console.log("were doing it111");
         var temp = "";
 
-  
+
 
         if(found_prospect.template == "NDA"){
         temp = config.NDA_temp;
@@ -673,6 +673,8 @@ exports.launchrequest = function(req,res){
             test_mode: 1,
             clientId: found_prospect.api_app,
             template_id: temp,
+            allow_reassign: 1,
+
             signers: [
               {
                 email_address: req.body.email,
