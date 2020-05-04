@@ -1,3 +1,4 @@
 /node_modules/
 /public/images/
+/public/javascripts/sourcecode.js
 /.env
